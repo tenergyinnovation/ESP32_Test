@@ -37,7 +37,7 @@ void setup() {
 
 void loop() {
   // ===== กดปุ่ม S3: do-while =====
-  if (digitalRead(BUTTON_S3) == HIGH) {
+  if (digitalRead(BUTTON_S3) == LOW) {
     Serial.println("--- ทดสอบ do-while ---");
     
     // do-while จะทำงานอย่างน้อย 1 ครั้งเสมอ

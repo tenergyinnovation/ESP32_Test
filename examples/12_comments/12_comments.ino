@@ -42,8 +42,8 @@ void setup() {
 }
 
 void loop() {
-  // ตรวจสอบปุ่ม S1
-  if (digitalRead(BUTTON_S1) == HIGH) {
+  // ตรวจสอบปุ่ม S1 (LOW = กด)
+  if (digitalRead(BUTTON_S1) == LOW) {
     Serial.println("--- คำนวณพื้นที่วงกลม ---");
     
     // คำนวณพื้นที่วงกลมรัศมี 5

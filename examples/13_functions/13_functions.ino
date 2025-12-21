@@ -46,12 +46,12 @@ void setup() {
 }
 
 void loop() {
-  // อ่านค่าปุ่ม
-  bool btn1 = digitalRead(BUTTON_S1);
-  bool btn2 = digitalRead(BUTTON_S2);
+  // อ่านค่าปุ่ม (LOW = กด, HIGH = ไม่กด)
+  bool btn1 = digitalRead(BUTTON_S1) == LOW;
+  bool btn2 = digitalRead(BUTTON_S2) == LOW;
   
   // ===== เมื่อกดปุ่ม S1 =====
-  if (btn1 == HIGH) {
+  if (btn1) {
     Serial.println("--- กดปุ่ม S1 ---");
     
     // เรียกใช้ฟังก์ชันกระพริบ LED
@@ -68,7 +68,7 @@ void loop() {
   }
   
   // ===== เมื่อกดปุ่ม S2 =====
-  if (btn2 == HIGH) {
+  if (btn2) {
     Serial.println("--- กดปุ่ม S2 ---");
     
     // เรียกใช้ฟังก์ชันคำนวณพื้นที่วงกลม

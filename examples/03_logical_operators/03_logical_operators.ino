@@ -35,9 +35,9 @@ void setup() {
 }
 
 void loop() {
-  // อ่านค่าจากปุ่มกด (HIGH = กด, LOW = ไม่กด)
-  bool button1 = digitalRead(BUTTON_S1);
-  bool button2 = digitalRead(BUTTON_S2);
+  // อ่านค่าจากปุ่มกด (LOW = กด, HIGH = ไม่กด)
+  bool button1 = digitalRead(BUTTON_S1) == LOW;
+  bool button2 = digitalRead(BUTTON_S2) == LOW;
   
   // แสดงสถานะปุ่ม
   Serial.print("ปุ่ม S1: ");

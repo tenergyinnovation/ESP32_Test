@@ -35,14 +35,14 @@ void setup() {
 }
 
 void loop() {
-  // อ่านค่าปุ่ม S4
-  bool buttonPressed = digitalRead(BUTTON_S4);
+  // อ่านค่าปุ่ม S4 (LOW = กด, HIGH = ไม่กด)
+  bool buttonPressed = digitalRead(BUTTON_S4) == LOW;
   
   // แสดงสถานะ
   Serial.print("ปุ่ม S4: ");
   
   // ===== if-else statement =====
-  if (buttonPressed == HIGH) {
+  if (buttonPressed) {
     // กรณีกดปุ่ม
     digitalWrite(LED_YELLOW, HIGH);
     Serial.println("กด -> LED เปิด");

@@ -49,13 +49,13 @@ void setup() {
 }
 
 void loop() {
-  // อ่านค่าปุ่ม
+  // อ่านค่าปุ่ม (LOW = กด, HIGH = ไม่กด)
   int selectedButton = 0;
   
-  if (digitalRead(BUTTON_S1) == HIGH) selectedButton = 1;
-  else if (digitalRead(BUTTON_S2) == HIGH) selectedButton = 2;
-  else if (digitalRead(BUTTON_S3) == HIGH) selectedButton = 3;
-  else if (digitalRead(BUTTON_S4) == HIGH) selectedButton = 4;
+  if (digitalRead(BUTTON_S1) == LOW) selectedButton = 1;
+  else if (digitalRead(BUTTON_S2) == LOW) selectedButton = 2;
+  else if (digitalRead(BUTTON_S3) == LOW) selectedButton = 3;
+  else if (digitalRead(BUTTON_S4) == LOW) selectedButton = 4;
   
   // ปิด LED ทั้งหมดก่อน
   digitalWrite(LED_RED, LOW);

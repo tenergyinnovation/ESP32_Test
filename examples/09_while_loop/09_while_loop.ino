@@ -40,7 +40,7 @@ void setup() {
 
 void loop() {
   // ===== กดปุ่ม S1: นับขึ้น =====
-  if (digitalRead(BUTTON_S1) == HIGH) {
+  if (digitalRead(BUTTON_S1) == LOW) {
     Serial.println("--- นับขึ้น 1-10 ---");
     
     int counter = 1;
@@ -60,7 +60,7 @@ void loop() {
   }
   
   // ===== กดปุ่ม S2: นับถอยหลัง =====
-  if (digitalRead(BUTTON_S2) == HIGH) {
+  if (digitalRead(BUTTON_S2) == LOW) {
     Serial.println("--- นับถอยหลัง 5-1 ---");
     
     int countdown = 5;

@@ -50,11 +50,11 @@ void setup() {
 }
 
 void loop() {
-  // อ่านค่าปุ่มทั้ง 4
-  bool btn1 = digitalRead(BUTTON_S1);
-  bool btn2 = digitalRead(BUTTON_S2);
-  bool btn3 = digitalRead(BUTTON_S3);
-  bool btn4 = digitalRead(BUTTON_S4);
+  // อ่านค่าปุ่มทั้ง 4 (LOW = กด, HIGH = ไม่กด)
+  bool btn1 = digitalRead(BUTTON_S1) == LOW;
+  bool btn2 = digitalRead(BUTTON_S2) == LOW;
+  bool btn3 = digitalRead(BUTTON_S3) == LOW;
+  bool btn4 = digitalRead(BUTTON_S4) == LOW;
   
   // ปิด LED ทั้งหมดก่อน
   digitalWrite(LED_RED, LOW);
@@ -63,19 +63,19 @@ void loop() {
   digitalWrite(LED_GREEN, LOW);
   
   // ===== if-else if-else statement =====
-  if (btn1 == HIGH) {
+  if (btn1) {
     // กดปุ่ม S1 -> เปิด LED แดง
     digitalWrite(LED_RED, HIGH);
     Serial.println("S1 กด -> LED แดง");
-  } else if (btn2 == HIGH) {
+  } else if (btn2) {
     // กดปุ่ม S2 -> เปิด LED เหลือง
     digitalWrite(LED_YELLOW, HIGH);
     Serial.println("S2 กด -> LED เหลือง");
-  } else if (btn3 == HIGH) {
+  } else if (btn3) {
     // กดปุ่ม S3 -> เปิด LED น้ำเงิน
     digitalWrite(LED_BLUE, HIGH);
     Serial.println("S3 กด -> LED น้ำเงิน");
-  } else if (btn4 == HIGH) {
+  } else if (btn4) {
     // กดปุ่ม S4 -> เปิด LED เขียว
     digitalWrite(LED_GREEN, HIGH);
     Serial.println("S4 กด -> LED เขียว");

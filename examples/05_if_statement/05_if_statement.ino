@@ -34,21 +34,21 @@ void setup() {
 }
 
 void loop() {
-  // อ่านค่าปุ่ม S3
-  bool buttonPressed = digitalRead(BUTTON_S3);
+  // อ่านค่าปุ่ม S3 (LOW = กด, HIGH = ไม่กด)
+  bool buttonPressed = digitalRead(BUTTON_S3) == LOW;
   
   // แสดงสถานะปุ่ม
   Serial.print("ปุ่ม S3: ");
   
   // ===== if statement =====
-  // ถ้ากดปุ่ม (HIGH) จะเปิด LED
-  if (buttonPressed == HIGH) {
+  // ถ้ากดปุ่ม (LOW) จะเปิด LED
+  if (buttonPressed) {
     digitalWrite(LED_RED, HIGH);
     Serial.println("กด -> LED เปิด");
   }
   
-  // ถ้าไม่กดปุ่ม (LOW) จะปิด LED
-  if (buttonPressed == LOW) {
+  // ถ้าไม่กดปุ่ม (HIGH) จะปิด LED
+  if (!buttonPressed) {
     digitalWrite(LED_RED, LOW);
     Serial.println("ปล่อย -> LED ปิด");
   }

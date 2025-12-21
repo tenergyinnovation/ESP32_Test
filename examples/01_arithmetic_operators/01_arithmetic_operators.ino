@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 /*
  * ===================================================================
  * ตัวอย่างการใช้งาน Arithmetic Operators (ตัวดำเนินการทางคณิตศาสตร์)
@@ -10,143 +12,93 @@
  * / : หาร (Division)
  * % : โมดูลัส (Modulus) - เอาเศษจากการหาร
  * 
- * โค้ดนี้จะแสดงการใช้งานตัวดำเนินการทางคณิตศาสตร์ต่างๆ
- * และแสดงผลลัพธ์ผ่าน Serial Monitor
+ * โค้ดนี้จะแสดงผลการคำนวณทุกๆ 3 วินาที
  * ===================================================================
  */
 
 // ประกาศตัวแปรสำหรับการคำนวณ
 int a = 20;
 int b = 7;
-int result;
 
 void setup() {
-  // เริ่มต้น Serial Communication ที่ baud rate 115200
+  // ตั้งค่า Serial Communication ที่ baud rate 115200
   Serial.begin(115200);
+  delay(1000);  // รอให้ Serial Port พร้อม
   
-  // รอให้ Serial Port พร้อมใช้งาน
-  delay(1000);
-  
+  // แสดงข้อความเริ่มต้น
   Serial.println("===================================");
   Serial.println("Arithmetic Operators Demo");
+  Serial.println("แสดงผลทุกๆ 3 วินาที");
   Serial.println("===================================");
   Serial.println();
-  
-  // แสดงค่าตัวแปรเริ่มต้น
-  Serial.print("a = ");
-  Serial.println(a);
-  Serial.print("b = ");
+}
+
+void loop() {
+  // แสดงค่าตัวแปรที่ใช้คำนวณ
+  Serial.print("ค่าที่ใช้: a = ");
+  Serial.print(a);
+  Serial.print(", b = ");
   Serial.println(b);
   Serial.println();
   
   // ===== การบวก (Addition) =====
-  result = a + b;
-  Serial.println("----- การบวก (Addition) -----");
-  Serial.print("a + b = ");
+  int resultAdd = a + b;
+  Serial.print("บวก: ");
   Serial.print(a);
   Serial.print(" + ");
   Serial.print(b);
   Serial.print(" = ");
-  Serial.println(result);
-  Serial.println();
+  Serial.println(resultAdd);
   
   // ===== การลบ (Subtraction) =====
-  result = a - b;
-  Serial.println("----- การลบ (Subtraction) -----");
-  Serial.print("a - b = ");
+  int resultSub = a - b;
+  Serial.print("ลบ:  ");
   Serial.print(a);
   Serial.print(" - ");
   Serial.print(b);
   Serial.print(" = ");
-  Serial.println(result);
-  Serial.println();
+  Serial.println(resultSub);
   
   // ===== การคูณ (Multiplication) =====
-  result = a * b;
-  Serial.println("----- การคูณ (Multiplication) -----");
-  Serial.print("a * b = ");
+  int resultMul = a * b;
+  Serial.print("คูณ: ");
   Serial.print(a);
   Serial.print(" * ");
   Serial.print(b);
   Serial.print(" = ");
-  Serial.println(result);
-  Serial.println();
+  Serial.println(resultMul);
   
   // ===== การหาร (Division) =====
-  result = a / b;  // ผลลัพธ์จะเป็นเลขจำนวนเต็ม (ไม่มีทศนิยม)
-  Serial.println("----- การหาร (Division) -----");
-  Serial.print("a / b = ");
+  int resultDiv = a / b;  // ผลลัพธ์เป็นจำนวนเต็ม
+  Serial.print("หาร: ");
   Serial.print(a);
   Serial.print(" / ");
   Serial.print(b);
   Serial.print(" = ");
-  Serial.println(result);
-  Serial.println("(หมายเหตุ: การหารเลขจำนวนเต็มจะได้ผลลัพธ์เป็นจำนวนเต็ม)");
-  Serial.println();
+  Serial.println(resultDiv);
   
-  // ===== การหารแบบ Float (Division with Float) =====
-  float floatResult = (float)a / (float)b;  // แปลงเป็น float เพื่อให้ได้ทศนิยม
-  Serial.println("----- การหารแบบทศนิยม (Division with Float) -----");
-  Serial.print("(float)a / (float)b = ");
+  // ===== การหารแบบทศนิยม =====
+  float resultFloat = (float)a / (float)b;  // แปลงเป็น float
+  Serial.print("หาร (ทศนิยม): ");
   Serial.print(a);
   Serial.print(" / ");
   Serial.print(b);
   Serial.print(" = ");
-  Serial.println(floatResult, 2);  // แสดง 2 ตำแหน่งทศนิยม
-  Serial.println();
+  Serial.println(resultFloat, 2);  // แสดง 2 ตำแหน่งทศนิยม
   
-  // ===== โมดูลัส (Modulus) - หาเศษจากการหาร =====
-  result = a % b;
-  Serial.println("----- โมดูลัส (Modulus) - หาเศษจากการหาร -----");
-  Serial.print("a % b = ");
+  // ===== โมดูลัส (หาเศษ) =====
+  int resultMod = a % b;
+  Serial.print("เศษจากการหาร: ");
   Serial.print(a);
   Serial.print(" % ");
   Serial.print(b);
   Serial.print(" = ");
-  Serial.println(result);
-  Serial.println("(หมายเหตุ: โมดูลัสคือเศษที่เหลือจากการหาร)");
+  Serial.println(resultMod);
+  
+  Serial.println();
+  Serial.println("-----------------------------------");
   Serial.println();
   
-  // ===== ตัวอย่างการใช้งานในชีวิตจริง =====
-  Serial.println("===================================");
-  Serial.println("ตัวอย่างการใช้งานจริง");
-  Serial.println("===================================");
-  
-  // ตัวอย่าง: คำนวณค่าเฉลี่ย
-  int score1 = 85;
-  int score2 = 92;
-  int score3 = 78;
-  float average = (score1 + score2 + score3) / 3.0;
-  Serial.println("คำนวณคะแนนเฉลี่ย:");
-  Serial.print("คะแนน: ");
-  Serial.print(score1);
-  Serial.print(", ");
-  Serial.print(score2);
-  Serial.print(", ");
-  Serial.println(score3);
-  Serial.print("คะแนนเฉลี่ย = ");
-  Serial.println(average, 2);
-  Serial.println();
-  
-  // ตัวอย่าง: แปลงวินาทีเป็นนาทีและวินาที
-  int totalSeconds = 125;
-  int minutes = totalSeconds / 60;
-  int seconds = totalSeconds % 60;
-  Serial.println("แปลงวินาทีเป็นนาที:วินาที:");
-  Serial.print(totalSeconds);
-  Serial.print(" วินาที = ");
-  Serial.print(minutes);
-  Serial.print(" นาที ");
-  Serial.print(seconds);
-  Serial.println(" วินาที");
-  Serial.println();
-  
-  Serial.println("===================================");
-  Serial.println("จบการแสดงผล");
-  Serial.println("===================================");
-}
-
-void loop() {
-  // ไม่มีการทำงานใน loop() 
-  // เพราะเราแสดงผลครั้งเดียวใน setup() แล้ว
+  // รอ 3 วินาที ก่อนแสดงผลรอบถัดไป
+  delay(3000);
 }

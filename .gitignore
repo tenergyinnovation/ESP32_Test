@@ -7,3 +7,7 @@ ai_prompt.md
 src/main.cpp
 src/main.cpp
 src/main.cpp
+lib/.DS_Store
+lib/ErriezBH1750/
+lib/esp32_iot/
+.DS_Store

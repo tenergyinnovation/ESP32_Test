@@ -1,83 +1,108 @@
-#include <Arduino.h>
-
 /*
- * ===================================================================
- * ตัวอย่างการใช้งาน while Loop
- * ===================================================================
+ * ตัวอย่าง: การควบคุม Relay ผ่านปุ่มกด Switch
  * 
- * while loop ใช้วนซ้ำตราบเท่าที่เงื่อนไขเป็นจริง
+ * คำอธิบาย:
+ * - โปรแกรมนี้แสดงการควบคุม Relay Module 2 ตัวผ่านปุ่มกด SW1-SW4
+ * - กดปุ่ม SW1 → Relay1 เปิด, Relay2 ปิด
+ * - กดปุ่ม SW2 → Relay1 ปิด, Relay2 เปิด
+ * - กดปุ่ม SW3 → Relay1 ปิด, Relay2 ปิด (ปิดทั้งคู่)
+ * - กดปุ่ม SW4 → Relay1 เปิด, Relay2 เปิด (เปิดทั้งคู่)
+ * - ทุกครั้งที่กดปุ่ม จะมีเสียง Buzzer beep 1 ครั้ง
+ * - แสดงสถานะการทำงานผ่าน Serial Monitor
+ * - ใช้ library esp32_iot ในการควบคุม
  * 
- * ใช้ปุ่ม S1 (D32) เพื่อเริ่มการนับขึ้น
- * และปุ่ม S2 (VP) เพื่อเริ่มการนับถอยหลัง
- * ===================================================================
+ * พินที่ใช้งาน:
+ * - SW1-SW4: GPIO 32, 36, 35, 34
+ * - Relay1: GPIO 25
+ * - Relay2: GPIO 26
+ * - Buzzer: GPIO 13
  */
 
-// กำหนดพิน
-const int BUTTON_S1 = 32;
-const int BUTTON_S2 = 36;
-const int LED_RED = 4;
-const int LED_YELLOW = 12;
+#include <Arduino.h>
+#include <esp32_iot.h>
+
+// สร้าง object สำหรับใช้งาน library esp32_iot
+esp32_iot board;
 
 void setup() {
-  // ตั้งค่า Serial
+  // เริ่มต้น Serial communication ที่ baud rate 115200
   Serial.begin(115200);
   delay(1000);
   
-  // ตั้งค่าพิน
-  pinMode(BUTTON_S1, INPUT);
-  pinMode(BUTTON_S2, INPUT);
-  pinMode(LED_RED, OUTPUT);
-  pinMode(LED_YELLOW, OUTPUT);
+  // เริ่มต้นการทำงานของ esp32_iot library
+  board.begin();
   
-  // แสดงข้อความเริ่มต้น
-  Serial.println("===================================");
-  Serial.println("while Loop Demo");
-  Serial.println("S1: นับขึ้น 1-10 พร้อมกระพริบ LED แดง");
-  Serial.println("S2: นับถอยหลัง 5-1 พร้อมกระพริบ LED เหลือง");
-  Serial.println("===================================");
-  Serial.println();
+  // ปิด Relay ทั้งสองตัวเมื่อเริ่มต้นโปรแกรม
+  board.relay1_Off();
+  board.relay2_Off();
+  
+  // แสดงข้อความเริ่มต้นโปรแกรม
+  Serial.println("\n=================================");
+  Serial.println("โปรแกรมควบคุม Relay ผ่านปุ่มกด");
+  Serial.println("ผ่าน library esp32_iot");
+  Serial.println("=================================");
+  Serial.println("SW1 = Relay1 ON,  Relay2 OFF");
+  Serial.println("SW2 = Relay1 OFF, Relay2 ON");
+  Serial.println("SW3 = Relay1 OFF, Relay2 OFF");
+  Serial.println("SW4 = Relay1 ON,  Relay2 ON");
+  Serial.println("=================================\n");
+  Serial.println("สถานะเริ่มต้น:");
+  Serial.println("⚡ Relay1: OFF | Relay2: OFF\n");
 }
 
 void loop() {
-  // ===== กดปุ่ม S1: นับขึ้น =====
-  if (digitalRead(BUTTON_S1) == LOW) {
-    Serial.println("--- นับขึ้น 1-10 ---");
+  // ตรวจสอบปุ่ม SW1
+  if (board.read_SW1()) {
+    // กดปุ่ม SW1: Relay1 เปิด, Relay2 ปิด
+    Serial.println("🔘 SW1 กด");
+    Serial.println("⚡ Relay1: ON  | Relay2: OFF");
     
-    int counter = 1;
-    while (counter <= 10) {
-      Serial.print("Counter: ");
-      Serial.println(counter);
-      digitalWrite(LED_RED, HIGH);
-      delay(200);
-      digitalWrite(LED_RED, LOW);
-      delay(300);
-      counter++;
-    }
+    board.relay1_On();   // เปิด Relay1
+    board.relay2_Off();  // ปิด Relay2
+    board.buzzer_beep(1, 100);  // Buzzer beep 1 ครั้ง
     
-    Serial.println("เสร็จสิ้น");
-    Serial.println();
-    delay(1000);
+    delay(300);  // Debounce delay
   }
   
-  // ===== กดปุ่ม S2: นับถอยหลัง =====
-  if (digitalRead(BUTTON_S2) == LOW) {
-    Serial.println("--- นับถอยหลัง 5-1 ---");
+  // ตรวจสอบปุ่ม SW2
+  if (board.read_SW2()) {
+    // กดปุ่ม SW2: Relay1 ปิด, Relay2 เปิด
+    Serial.println("🔘 SW2 กด");
+    Serial.println("⚡ Relay1: OFF | Relay2: ON");
     
-    int countdown = 5;
-    while (countdown > 0) {
-      Serial.print("Countdown: ");
-      Serial.println(countdown);
-      digitalWrite(LED_YELLOW, HIGH);
-      delay(200);
-      digitalWrite(LED_YELLOW, LOW);
-      delay(300);
-      countdown--;
-    }
+    board.relay1_Off();  // ปิด Relay1
+    board.relay2_On();   // เปิด Relay2
+    board.buzzer_beep(1, 100);  // Buzzer beep 1 ครั้ง
     
-    Serial.println("🚀 Blast off!");
-    Serial.println();
-    delay(1000);
+    delay(300);  // Debounce delay
   }
   
-  delay(100);
+  // ตรวจสอบปุ่ม SW3
+  if (board.read_SW3()) {
+    // กดปุ่ม SW3: Relay1 ปิด, Relay2 ปิด (ปิดทั้งคู่)
+    Serial.println("🔘 SW3 กด");
+    Serial.println("⚡ Relay1: OFF | Relay2: OFF (ปิดทั้งคู่)");
+    
+    board.relay1_Off();  // ปิด Relay1
+    board.relay2_Off();  // ปิด Relay2
+    board.buzzer_beep(1, 100);  // Buzzer beep 1 ครั้ง
+    
+    delay(300);  // Debounce delay
+  }
+  
+  // ตรวจสอบปุ่ม SW4
+  if (board.read_SW4()) {
+    // กดปุ่ม SW4: Relay1 เปิด, Relay2 เปิด (เปิดทั้งคู่)
+    Serial.println("🔘 SW4 กด");
+    Serial.println("⚡ Relay1: ON  | Relay2: ON  (เปิดทั้งคู่)");
+    
+    board.relay1_On();   // เปิด Relay1
+    board.relay2_On();   // เปิด Relay2
+    board.buzzer_beep(1, 100);  // Buzzer beep 1 ครั้ง
+    
+    delay(300);  // Debounce delay
+  }
+  
+  // หน่วงเวลาเล็กน้อยเพื่อลดการใช้งาน CPU
+  delay(10);
 }

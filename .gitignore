@@ -11,3 +11,6 @@ lib/.DS_Store
 lib/ErriezBH1750/
 lib/esp32_iot/
 .DS_Store
+lib/Adafruit_Sensor/
+lib/DHT-sensor-library/
+lib/ErriezTM1638/

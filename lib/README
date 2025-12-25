@@ -50,3 +50,5 @@ More information about PlatformIO Library Dependency Finder
 3. git clone https://github.com/Erriez/ErriezTM1638.git
 3. git clone https://github.com/adafruit/DHT-sensor-library.git
 4. git clone https://github.com/adafruit/Adafruit_Sensor.git
+5. git clone git clone https://github.com/blynkkk/blynk-library.git
+  

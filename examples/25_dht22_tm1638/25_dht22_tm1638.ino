@@ -36,20 +36,6 @@ esp32_iot board;
 // สร้าง object สำหรับควบคุม DHT sensor
 DHT dht(DHT_PIN, DHT_TYPE);
 
-// ตัวแปรสำหรับจับเวลา
-unsigned long previousMillis = 0;  // เก็บเวลาที่อ่านค่าครั้งล่าสุด
-const long interval = 2000;         // ช่วงเวลาในการอัพเดท (2000 ms = 2 วินาที)
-
-// ฟังก์ชันสำหรับแสดงผลบนจอ TM1638 (อุณหภูมิ 4 หลักแรก + ความชื้น 4 หลักหลัง)
-void displayTempHumidity(float temperature, float humidity) {
-  // แปลงค่าอุณหภูมิและความชื้นเป็น integer เพื่อแสดงผล
-  int temp_int = (int)(temperature * 10);  // คูณ 10 เพื่อให้มีทศนิยม 1 ตำแหน่ง เช่น 28.5 -> 285
-  int humid_int = (int)(humidity * 10);     // คูณ 10 เพื่อให้มีทศนิยม 1 ตำแหน่ง เช่น 65.2 -> 652
-  
-  // แสดงผลบนจอ TM1638 โดยใช้ฟังก์ชัน tm1638_number(หลัก5-8, หลัก1-4)
-  // หลัก 1-4: อุณหภูมิ, หลัก 5-8: ความชื้น
-  board.tm1638_number(humid_int, temp_int);
-}
 
 void setup() {
   // เริ่มต้น Serial สำหรับแสดงผลข้อมูลทาง Serial Monitor
@@ -80,37 +66,36 @@ void setup() {
 }
 
 void loop() {
-  // ตรวจสอบว่าถึงเวลาอัพเดทค่าหรือยัง (ทุกๆ 2 วินาที)
-  unsigned long currentMillis = millis();
+  // อ่านค่าความชื้นจาก DHT22
+  float humidity = dht.readHumidity();
   
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis;  // บันทึกเวลาปัจจุบัน
+  // อ่านค่าอุณหภูมิจาก DHT22 (°C)
+  float temperature = dht.readTemperature();
+  
+  // ตรวจสอบว่าอ่านค่าได้หรือไม่
+  if (isnan(humidity) || isnan(temperature)) {
+    // ถ้าอ่านค่าไม่ได้ แสดงข้อความ Error
+    Serial.println("Error: ไม่สามารถอ่านค่าจาก DHT sensor!");
     
-    // อ่านค่าความชื้นจาก DHT22
-    float humidity = dht.readHumidity();
+    // แสดงข้อความ Error บนจอ TM1638 (ล้างจอ)
+    board.tm1638_clear();
     
-    // อ่านค่าอุณหภูมิจาก DHT22 (°C)
-    float temperature = dht.readTemperature();
-    
-    // ตรวจสอบว่าอ่านค่าได้หรือไม่
-    if (isnan(humidity) || isnan(temperature)) {
-      // ถ้าอ่านค่าไม่ได้ แสดงข้อความ Error
-      Serial.println("Error: ไม่สามารถอ่านค่าจาก DHT sensor!");
-      
-      // แสดงข้อความ Error บนจอ TM1638 (แสดง "----")
-      board.tm1638_clear();
-      return;
-    }
-    
-    // แสดงผลค่าที่อ่านได้ทาง Serial Monitor
-    Serial.print("อุณหภูมิ: ");
-    Serial.print(temperature, 1);  // แสดงทศนิยม 1 ตำแหน่ง
-    Serial.print(" °C  |  ");
-    Serial.print("ความชื้น: ");
-    Serial.print(humidity, 1);     // แสดงทศนิยม 1 ตำแหน่ง
-    Serial.println(" %");
-    
-    // แสดงผลบนจอ TM1638
-    displayTempHumidity(temperature, humidity);
+    // หน่วงเวลา 2 วินาทีก่อนอ่านค่าใหม่
+    delay(2000);
+    return;
   }
+  
+  // แสดงผลค่าที่อ่านได้ทาง Serial Monitor
+  Serial.print("อุณหภูมิ: ");
+  Serial.print(temperature, 1);  // แสดงทศนิยม 1 ตำแหน่ง
+  Serial.print(" °C  |  ");
+  Serial.print("ความชื้น: ");
+  Serial.print(humidity, 1);     // แสดงทศนิยม 1 ตำแหน่ง
+  Serial.println(" %");
+  
+  // แสดงผลบนจอ TM1638
+  board.tm1638_number(humidity, temperature);
+  
+  // หน่วงเวลา 2 วินาทีก่อนอ่านค่าใหม่
+  delay(2000);
 }

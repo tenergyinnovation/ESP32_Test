@@ -14,3 +14,12 @@ lib/esp32_iot/
 lib/Adafruit_Sensor/
 lib/DHT-sensor-library/
 lib/ErriezTM1638/
+lib/esp32_iot-Experiment-2/esp32_iot.cpp
+lib/esp32_iot-Experiment-2/esp32_iot.h
+lib/esp32_iot-Experiment-2/keywords.txt
+lib/esp32_iot-Experiment-2/library.json
+lib/esp32_iot-Experiment-2/library.properties
+lib/esp32_iot-Experiment-2/LICENSE
+lib/esp32_iot-Experiment-2/README.md
+src/main.cpp
+src/main.cpp

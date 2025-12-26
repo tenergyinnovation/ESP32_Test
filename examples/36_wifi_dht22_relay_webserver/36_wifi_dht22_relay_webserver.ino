@@ -178,19 +178,23 @@ void controlRelay(int relayNum, bool state) {
   if (relayNum == 1) {
     relay1Status = state;
     if (state) {
-      board.relay1_On();
+      // สลับ logic: เปิด relay ใช้ Off() เนื่องจากฮาร์ดแวร์เป็น Active LOW
+      board.relay1_Off();
       Serial.println("Relay 1: เปิด");
     } else {
-      board.relay1_Off();
+      // สลับ logic: ปิด relay ใช้ On() เนื่องจากฮาร์ดแวร์เป็น Active LOW
+      board.relay1_On();
       Serial.println("Relay 1: ปิด");
     }
   } else if (relayNum == 2) {
     relay2Status = state;
     if (state) {
-      board.relay2_On();
+      // สลับ logic: เปิด relay ใช้ Off() เนื่องจากฮาร์ดแวร์เป็น Active LOW
+      board.relay2_Off();
       Serial.println("Relay 2: เปิด");
     } else {
-      board.relay2_Off();
+      // สลับ logic: ปิด relay ใช้ On() เนื่องจากฮาร์ดแวร์เป็น Active LOW
+      board.relay2_On();
       Serial.println("Relay 2: ปิด");
     }
   }
